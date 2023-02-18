@@ -1,4 +1,5 @@
 import SideNavigation from "../../comps/SideNavigation";
+import SpotifyConnectedAccount from "../../comps/SpotifyConnectedAccount";
 
 function Profile() {
   return (
@@ -6,7 +7,9 @@ function Profile() {
       <SideNavigation />
       <div className="page-wraper-content">
         <div className="contentAboutUtserProfile"></div>
-        <div className="componentnt"></div>
+        <div className="componentnt">
+          <SpotifyConnectedAccount />
+        </div>
       </div>
     </div>
   );

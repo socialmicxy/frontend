@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import SpotifyButton from "./connectMusicAccounts/spotifyButton";
-function ConnectAccount(props) {
+function ConnectAccount() {
   const { type, user } = props;
   const [loadMenu, setLoadMenu] = useState(false);
   const account = user?.connectedAccounts.find(
