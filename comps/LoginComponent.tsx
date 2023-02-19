@@ -1,10 +1,30 @@
+"use client";
 import axios from "axios";
-import { useState, useEffect } from "react";
-import jwt_decode from "jwt-decode";
 import { IoMdClose } from "react-icons/io";
-
+import { useSession, signIn, signOut } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 function LoginComponent() {
-  useEffect(() => {}, []);
+  const { data: session } = useSession();
+  const router = useRouter();
+  useEffect(() => {
+    if (session) {
+      console.log("yes");
+      loginWithGoogle(session?.user);
+    }
+  }, [session]);
+
+  function loginWithGoogle(user: {
+    email: string;
+    name: string;
+    image: string;
+  }) {
+    console.log("124ttt");
+    axios.post("/api/login", user, { withCredentials: true }).then((result) => {
+      console.log("wjrj");
+      //router.push("/account/profile")
+    });
+  }
 
   return (
     <div className="login-box">
@@ -15,7 +35,9 @@ function LoginComponent() {
             <IoMdClose />
           </div>
         </div>
-        <div id="sign-in"></div>
+        <button onClick={() => signIn()} id="sign-in">
+          Sign in with google
+        </button>
       </div>
     </div>
   );

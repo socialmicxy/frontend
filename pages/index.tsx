@@ -1,8 +1,33 @@
-import type { NextPage } from "next";
+import type { NextPage, GetServerSideProps } from "next";
 import { selectAuthState, setAuthState } from "../reduxStore/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-const Home: NextPage = () => {
+import { withSessionSsr } from "../lib/config/session";
+interface HomeProps {
+  user?: any;
+}
+export const getServerSideProps = withSessionSsr(
+  async function getServerSideProps({ req }) {
+    const session = req.session;
+    if (!session.hasOwnProperty("email")) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/login",
+        },
+      };
+    } else {
+      return {
+        props: {
+          user: req.session.user,
+        },
+      };
+    }
+  }
+);
+
+const Home: NextPage<HomeProps> = ({ user }) => {
+  console.log(user);
   const authState = useSelector(selectAuthState);
   const dispatch = useDispatch();
   return (
