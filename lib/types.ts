@@ -5,9 +5,7 @@ export interface ResponseFuncs {
   DELETE?: Function;
 }
 
-export type User = {
-  isLoggedIn: boolean;
-  login: string;
-  avatarUrl: string;
+export type UserSession = {
   email: string;
+  userId: string;
 };

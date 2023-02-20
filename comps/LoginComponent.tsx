@@ -1,15 +1,34 @@
 "use client";
 import axios from "axios";
 import { IoMdClose } from "react-icons/io";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
+import { withSession } from "../lib/config/session";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-function LoginComponent() {
+import type { NextPage } from "next";
+export const getServerSideProps = withSession(
+  async function getServerSideProps({ req }) {
+    const session = req.session;
+    if (session.hasOwnProperty("user")) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/account/profile",
+        },
+      };
+    } else {
+      return {
+        props: {},
+      };
+    }
+  }
+);
+
+const LoginComponent: NextPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
   useEffect(() => {
     if (session) {
-      console.log("yes");
       loginWithGoogle(session?.user);
     }
   }, [session]);
@@ -19,10 +38,8 @@ function LoginComponent() {
     name: string;
     image: string;
   }) {
-    console.log("124ttt");
     axios.post("/api/login", user, { withCredentials: true }).then((result) => {
-      console.log("wjrj");
-      //router.push("/account/profile")
+      router.push("/account/profile");
     });
   }
 
@@ -41,5 +58,5 @@ function LoginComponent() {
       </div>
     </div>
   );
-}
+};
 export default LoginComponent;

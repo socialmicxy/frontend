@@ -1,6 +1,21 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Model, Schema } from "mongoose";
 
-const userSchema = new mongoose.Schema({
+interface IUser extends Document {
+  username: string;
+  profileUrl: string;
+  email: string;
+  googleId: string;
+  connectedAccounts: {
+    accountType: string;
+    token: string;
+    refreshToken: string;
+    id: string;
+    expiresIn: number;
+  }[];
+  musicsyncspace: boolean;
+}
+
+const userSchema: Schema<IUser> = new mongoose.Schema({
   username: String,
   profileUrl: String,
   email: String,
@@ -17,5 +32,7 @@ const userSchema = new mongoose.Schema({
   musicsyncspace: Boolean,
 });
 
-const User = mongoose.model("authUsers", userSchema);
-module.exports = User;
+const User: Model<IUser> =
+  mongoose.models.User || mongoose.model<IUser>("User", userSchema);
+
+export default User;

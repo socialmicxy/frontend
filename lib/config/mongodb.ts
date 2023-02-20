@@ -1,14 +1,13 @@
-//IMPORT MONGOOSE
 import mongoose from "mongoose";
 
-// CONNECTING TO MONGOOSE (Get Database Url from .env.local)
-const { DATABASE_URL } = process.env;
-
-// connection function
-export const connect = async () => {
-  const conn = await mongoose
-    .connect(DATABASE_URL as string)
-    .catch((err) => console.log(err));
-  console.log("Mongoose Connection Established");
-  return conn;
+const MONGODB_URI: string =
+  "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.5.0";
+const connectToDatabase = async () => {
+  const options: Record<string, any> = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  };
+  const connection = await mongoose.connect(MONGODB_URI, options);
+  return connection;
 };
+export default connectToDatabase;
